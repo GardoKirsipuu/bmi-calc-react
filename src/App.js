@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Container, Card, Form, Button } from 'react-bootstrap';
+import { Container, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import BmiForm from './components/BmiForm';
+import BmiTable from './components/BmiTable';
 
 function App() {
-  const [ height, setHeight ] = useState();
-  const [ weight, setWeight ] = useState();
-  const [ bmi, setBmi ] = useState();
-  const [ bmiDesc, setBmiDesc ] = useState();
+  const [bmi, setBmi] = useState();
+  const [bmiDesc, setBmiDesc] = useState();
 
-  const calcBmi = (event) => {
+  const calcBmi = (enteredHeight, enteredWeight) => {
 
-    let curBmi = (Math.round(((weight/(height/100)**2)*10))/10);
+    let curBmi = (Math.round(((enteredWeight / (enteredHeight / 100) ** 2) * 10)) / 10);
 
     setBmi('Your BMI is: ' + curBmi);
 
@@ -24,9 +24,7 @@ function App() {
     } else {
       setBmiDesc('You are obese')
     }
-
-    event.preventDefault();
-  }
+  };
 
 
   return (
@@ -36,50 +34,13 @@ function App() {
           <Card.Body>
             <Card.Title className='text-center'><h1>Calculate your BMI</h1></Card.Title>
             <Card.Text>
-
-              <Form className='mb-4' onSubmit={calcBmi}>
-
-                <Form.Group className="mb-4" controlId="formHeight">
-                  <Form.Label className='h4'>Enter your height in CM (100-250)</Form.Label>
-                  <Form.Control className='w-50' type="number" min={100} max={250} step={1} value={height} onChange={(e) => setHeight(e.target.value)}/>
-                  <Form.Range min={100} max={250} step={1} value={height} onChange={(e) => setHeight(e.target.value)}/>
-                </Form.Group>
-
-                <Form.Group className="mb-4" controlId="formWeight">
-                  <Form.Label className='h4'>Enter your weight in KG (20-200)</Form.Label>
-                  <Form.Control className='w-50' type="number" min={20} max={200} step={0.1} value={weight} onChange={(e) => setWeight(e.target.value)}/>
-                  <Form.Range min={20} max={200} step={0.1} value={weight} onChange={(e) => setWeight(e.target.value)}/>
-                </Form.Group>
-
-                <Button variant="primary" type="submit">Submit</Button>
-
-              </Form>
+              <BmiForm onCalcBmi={calcBmi} />
 
               {bmi}
-              <br/>
+              <br />
               {bmiDesc}
 
-              <table className='table table-striped fs-6 mt-4 w-50'>
-                <thead className='h4'>BMI Categories</thead>
-                <tbody>
-                  <tr>
-                    <td>Underweight</td>
-                    <td>Under 18.5</td>
-                  </tr>
-                  <tr>
-                    <td>Normal weight</td>
-                    <td>18.5–24.9</td>
-                  </tr>
-                  <tr>
-                    <td>Overweight</td>
-                    <td>25–29.9</td>
-                  </tr>
-                  <tr>
-                    <td>Obese</td>
-                    <td>30 or greater</td>
-                  </tr>
-                </tbody>
-              </table>
+              <BmiTable/>
 
             </Card.Text>
           </Card.Body>
@@ -87,6 +48,6 @@ function App() {
       </Container>
     </div>
   );
-}
+};
 
 export default App;
